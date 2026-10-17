@@ -2,6 +2,7 @@
 #include "main_window.hpp"
 #include "../i18n/localization.hpp"
 #include "../core/timer_resolution.hpp"
+#include "../core/config_manager.hpp"
 
 namespace MemStand {
 
@@ -145,6 +146,7 @@ void TrayIcon::Update(int memoryUsagePercent, const std::wstring& tooltip) {
 
 void TrayIcon::ShowBalloon(const std::wstring& title, const std::wstring& message) {
     if (!m_added) return;
+    if (!ConfigManager::Instance().Get().show_notifications) return;
 
     NOTIFYICONDATAW nid = m_nid;
     nid.uFlags = NIF_INFO;

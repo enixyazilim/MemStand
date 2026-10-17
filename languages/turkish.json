@@ -46,6 +46,7 @@
     "start_minimized": "Sistem Tepsisine Küçültülmüş Başlat",
     "minimize_to_tray_on_close": "Kapatıldığında Tepsiye Küçült",
     "hotkey_enable": "Global Temizleme Kısayolu (Ctrl+Shift+M)",
+    "show_notifications": "Masaüstü Bildirimlerini Göster",
 
     "tray_open": "MemStand'i Göster",
     "tray_clean_standby": "Standby Listesini Temizle",
@@ -65,6 +66,10 @@
     "update_available_title": "MemStand Güncellemesi Mevcut",
     "update_available_msg": "Yeni bir sürüm (%s) yayınlandı! İndirme sayfasını açmak için tıklayın.",
     "update_latest_msg": "En güncel MemStand sürümünü (%s) kullanıyorsunuz.",
-    "update_error_msg": "Güncelleme denetimi başarısız: %s"
+    "update_error_msg": "Güncelleme denetimi başarısız: %s",
+    "reason_auto_standby": "Otomatik Standby",
+    "reason_auto_high_ram": "Otomatik Yüksek RAM",
+    "reason_hotkey": "Kısayol Tuşu"
   }
 }
+

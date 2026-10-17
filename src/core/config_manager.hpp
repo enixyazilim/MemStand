@@ -24,6 +24,8 @@ struct AppConfig {
     bool hotkey_enabled = true;
     UINT hotkey_modifiers = MOD_CONTROL | MOD_SHIFT;
     UINT hotkey_key = 'M';
+
+    bool show_notifications = true;
 };
 
 class ConfigManager {

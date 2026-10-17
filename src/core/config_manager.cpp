@@ -118,6 +118,7 @@ bool ConfigManager::Load() {
     m_config.minimize_to_tray_on_close = GetBoolValue("minimize_to_tray_on_close", m_config.minimize_to_tray_on_close);
 
     m_config.hotkey_enabled = GetBoolValue("hotkey_enabled", m_config.hotkey_enabled);
+    m_config.show_notifications = GetBoolValue("show_notifications", m_config.show_notifications);
 
     // If config has legacy 1024/1024 defaults, upgrade them automatically to system-optimal values
     if (m_config.standby_threshold_mb == 1024 && m_config.free_mem_threshold_mb == 1024) {
@@ -148,10 +149,12 @@ bool ConfigManager::Save() {
     file << "  \"start_with_windows\": " << (m_config.start_with_windows ? "true" : "false") << ",\n";
     file << "  \"start_minimized\": " << (m_config.start_minimized ? "true" : "false") << ",\n";
     file << "  \"minimize_to_tray_on_close\": " << (m_config.minimize_to_tray_on_close ? "true" : "false") << ",\n";
-    file << "  \"hotkey_enabled\": " << (m_config.hotkey_enabled ? "true" : "false") << "\n";
+    file << "  \"hotkey_enabled\": " << (m_config.hotkey_enabled ? "true" : "false") << ",\n";
+    file << "  \"show_notifications\": " << (m_config.show_notifications ? "true" : "false") << "\n";
     file << "}\n";
 
     return true;
 }
+
 
 } // namespace MemStand

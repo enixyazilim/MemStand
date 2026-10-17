@@ -9,8 +9,8 @@ IDI_APP_ICON ICON "app.ico"
 
 // Version Information
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     1,0,0,0
-PRODUCTVERSION  1,0,0,0
+FILEVERSION     1,0,1,0
+PRODUCTVERSION  1,0,1,0
 FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
 FILEFLAGS       VS_FF_DEBUG
@@ -27,12 +27,13 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "Enix Yazılım"
             VALUE "FileDescription",  "MemStand - Smart Memory and Low-Latency Timer Manager"
-            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "FileVersion",      "1.0.1.0"
             VALUE "InternalName",     "MemStand"
             VALUE "LegalCopyright",   "Copyright (C) 2026 Enix Yazılım"
             VALUE "OriginalFilename", "MemStand.exe"
             VALUE "ProductName",      "MemStand"
-            VALUE "ProductVersion",   "1.0.0.0"
+            VALUE "ProductVersion",   "1.0.1.0"
+
         END
     END
     BLOCK "VarFileInfo"

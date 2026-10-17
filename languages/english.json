@@ -46,6 +46,7 @@
     "start_minimized": "Start Minimized to System Tray",
     "minimize_to_tray_on_close": "Minimize to Tray on Close",
     "hotkey_enable": "Global Purge Hotkey (Ctrl+Shift+M)",
+    "show_notifications": "Show Balloon Notifications",
 
     "tray_open": "Show MemStand",
     "tray_clean_standby": "Purge Standby List",
@@ -65,6 +66,9 @@
     "update_available_title": "MemStand Update Available",
     "update_available_msg": "A new version (%s) is available! Click to open the release page.",
     "update_latest_msg": "You are using the latest version of MemStand (%s).",
-    "update_error_msg": "Update check failed: %s"
+    "update_error_msg": "Update check failed: %s",
+    "reason_auto_standby": "Auto Standby",
+    "reason_auto_high_ram": "Auto High RAM",
+    "reason_hotkey": "Hotkey"
   }
 }

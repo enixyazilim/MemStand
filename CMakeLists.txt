@@ -47,6 +47,7 @@ target_link_libraries(MemStand PRIVATE
 )
 
 if(MSVC)
+    target_compile_options(MemStand PRIVATE /utf-8)
     target_link_options(MemStand PRIVATE /MANIFEST:NO)
 endif()
 

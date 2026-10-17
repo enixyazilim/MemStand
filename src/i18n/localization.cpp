@@ -49,6 +49,7 @@ void Localization::LoadBuiltinFallbacks() {
     en["minimize_to_tray_on_close"] = L"Minimize to Tray on Close";
     en["hotkey_enable"] = L"Global Purge Hotkey";
     en["hotkey_label"] = L"Hotkey (Ctrl+Shift+M)";
+    en["show_notifications"] = L"Show Balloon Notifications";
     en["tray_open"] = L"Show MemStand";
     en["tray_clean_standby"] = L"Purge Standby List";
     en["tray_clean_all"] = L"Clean All Memory Regions";
@@ -67,6 +68,9 @@ void Localization::LoadBuiltinFallbacks() {
     en["update_available_msg"] = L"A new version (%s) is available! Click to open the release page.";
     en["update_latest_msg"] = L"You are using the latest version of MemStand (%s).";
     en["update_error_msg"] = L"Update check failed: %s";
+    en["reason_auto_standby"] = L"Auto Standby";
+    en["reason_auto_high_ram"] = L"Auto High RAM";
+    en["reason_hotkey"] = L"Hotkey";
 
     // Built-in Turkish
     auto& tr = m_builtinLanguages["turkish"];
@@ -107,6 +111,7 @@ void Localization::LoadBuiltinFallbacks() {
     tr["start_minimized"] = L"Sistem Tepsisine Küçültülmüş Başlat";
     tr["minimize_to_tray_on_close"] = L"Kapatıldığında Tepsiye Küçült";
     tr["hotkey_enable"] = L"Global Temizleme Kısayolu (Ctrl+Shift+M)";
+    tr["show_notifications"] = L"Masaüstü Bildirimlerini Göster";
     tr["tray_open"] = L"MemStand'i Göster";
     tr["tray_clean_standby"] = L"Standby Listesini Temizle";
     tr["tray_clean_all"] = L"Tüm Bellek Bölgelerini Temizle";
@@ -124,7 +129,11 @@ void Localization::LoadBuiltinFallbacks() {
     tr["update_available_msg"] = L"Yeni bir sürüm (%s) yayınlandı! İndirme sayfasını açmak için tıklayın.";
     tr["update_latest_msg"] = L"En güncel MemStand sürümünü (%s) kullanıyorsunuz.";
     tr["update_error_msg"] = L"Güncelleme denetimi başarısız: %s";
+    tr["reason_auto_standby"] = L"Otomatik Standby";
+    tr["reason_auto_high_ram"] = L"Otomatik Yüksek RAM";
+    tr["reason_hotkey"] = L"Kısayol Tuşu";
 }
+
 
 bool Localization::ParseLanguageJson(const std::string& filePath, LanguageInfo& info, std::map<std::string, std::wstring>& strings) {
     std::ifstream file(filePath);

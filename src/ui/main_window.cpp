@@ -335,7 +335,7 @@ bool MainWindow::Create() {
     RegisterClassExW(&wc);
 
     DWORD dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-    RECT rcClient{ 0, 0, 500, 495 };
+    RECT rcClient{ 0, 0, 500, 525 };
     AdjustWindowRectEx(&rcClient, dwStyle, FALSE, 0);
     int winWidth = rcClient.right - rcClient.left;
     int winHeight = rcClient.bottom - rcClient.top;
@@ -549,10 +549,18 @@ void MainWindow::CreateControls(HWND hwnd) {
     );
     SetWindowSubclass(m_hChkHotkey, CheckboxSubclassProc, 0, 1);
 
+    m_hChkShowNotifications = CreateWindowExW(
+        0, L"BUTTON", L("show_notifications").c_str(),
+        WS_CHILD | BS_AUTOCHECKBOX,
+        30, 366, 440, 20,
+        hwnd, (HMENU)IDC_CHK_SHOW_NOTIFICATIONS, hInst, nullptr
+    );
+    SetWindowSubclass(m_hChkShowNotifications, CheckboxSubclassProc, 0, 1);
+
     m_hBtnSaveSettings = CreateWindowExW(
         0, L"BUTTON", L("btn_save_settings").c_str(),
         WS_CHILD | BS_PUSHBUTTON,
-        16, 400, 310, 38,
+        16, 412, 310, 38,
         hwnd, (HMENU)IDC_BTN_SAVE_SETTINGS, hInst, nullptr
     );
     SetWindowSubclass(m_hBtnSaveSettings, ActionButtonSubclassProc, 0, 5); // 5 = save
@@ -560,7 +568,7 @@ void MainWindow::CreateControls(HWND hwnd) {
     m_hBtnCheckUpdates = CreateWindowExW(
         0, L"BUTTON", L("btn_check_updates").c_str(),
         WS_CHILD | BS_PUSHBUTTON,
-        336, 400, 148, 38,
+        336, 412, 148, 38,
         hwnd, (HMENU)IDC_BTN_CHECK_UPDATES, hInst, nullptr
     );
     SetWindowSubclass(m_hBtnCheckUpdates, ActionButtonSubclassProc, 0, 7); // 7 = check updates
@@ -606,6 +614,7 @@ void MainWindow::PopulateSettingsToUI() {
     SendMessageW(m_hChkStartMinimized, BM_SETCHECK, config.start_minimized ? BST_CHECKED : BST_UNCHECKED, 0);
     SendMessageW(m_hChkMinOnClose, BM_SETCHECK, config.minimize_to_tray_on_close ? BST_CHECKED : BST_UNCHECKED, 0);
     SendMessageW(m_hChkHotkey, BM_SETCHECK, config.hotkey_enabled ? BST_CHECKED : BST_UNCHECKED, 0);
+    SendMessageW(m_hChkShowNotifications, BM_SETCHECK, config.show_notifications ? BST_CHECKED : BST_UNCHECKED, 0);
 
     // Update Start/Stop button appearance
     SetWindowTextW(m_hBtnStartStop, m_isMonitoringActive ? L("btn_stop").c_str() : L("btn_start").c_str());
@@ -667,6 +676,7 @@ void MainWindow::SwitchTab(int tabIndex) {
     ShowWindow(m_hChkStartMinimized, showSettings);
     ShowWindow(m_hChkMinOnClose, showSettings);
     ShowWindow(m_hChkHotkey, showSettings);
+    ShowWindow(m_hChkShowNotifications, showSettings);
     ShowWindow(m_hComboLanguage, showSettings);
     ShowWindow(m_hBtnSaveSettings, showSettings);
     ShowWindow(m_hBtnCheckUpdates, showSettings);
@@ -738,6 +748,9 @@ void MainWindow::ApplySettingsFromUI() {
         UnregisterGlobalHotkey();
     }
 
+    // Notifications
+    config.show_notifications = (SendMessageW(m_hChkShowNotifications, BM_GETCHECK, 0, 0) == BST_CHECKED);
+
     ConfigManager::Instance().Save();
     RefreshLanguage();
 
@@ -796,6 +809,7 @@ void MainWindow::RefreshLanguage() {
     SetWindowTextW(m_hChkStartMinimized, L("start_minimized").c_str());
     SetWindowTextW(m_hChkMinOnClose, L("minimize_to_tray_on_close").c_str());
     SetWindowTextW(m_hChkHotkey, L("hotkey_enable").c_str());
+    SetWindowTextW(m_hChkShowNotifications, L("show_notifications").c_str());
     SetWindowTextW(m_hBtnSaveSettings, L("btn_save_settings").c_str());
     SetWindowTextW(m_hBtnAutoDetect, L("btn_auto_detect").c_str());
     SetWindowTextW(m_hBtnCheckUpdates, L("btn_check_updates").c_str());
@@ -1038,15 +1052,25 @@ void MainWindow::DrawDashboard(HDC hdc, const RECT& rcClient) {
     SelectObject(hdc, hOldBr);
     DeleteObject(hPenBorder);
 
-    // Status Footer
+    // Status & Footer (Two separate rows to guarantee zero overlap)
     SelectObject(hdc, hFontMain);
     SetTextColor(hdc, Theme::TextMuted);
-    RECT rcStatus{ 16, 458, 280, 482 };
-    std::wstring statusDisplay = m_statusText.empty() ? L("status_ready") : m_statusText;
-    DrawTextW(hdc, statusDisplay.c_str(), -1, &rcStatus, DT_LEFT | DT_TOP | DT_SINGLELINE);
 
-    RECT rcBrand{ 280, 458, 484, 482 };
-    DrawTextW(hdc, L"MemStand v1.0.0 • Enix Yazılım", -1, &rcBrand, DT_RIGHT | DT_TOP | DT_SINGLELINE);
+    RECT rcStatus{ 16, 462, 484, 482 };
+    std::wstring statusDisplay = m_statusText.empty() ? L("status_ready") : m_statusText;
+    DrawTextW(hdc, statusDisplay.c_str(), -1, &rcStatus, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
+
+    // Subtle divider line
+    HPEN hPenDiv = CreatePen(PS_SOLID, 1, Theme::CardBorder);
+    HPEN hOldPenDiv = (HPEN)SelectObject(hdc, hPenDiv);
+    MoveToEx(hdc, 16, 488, nullptr);
+    LineTo(hdc, 484, 488);
+    SelectObject(hdc, hOldPenDiv);
+    DeleteObject(hPenDiv);
+
+    // Brand / Version Footer
+    RECT rcBrand{ 16, 494, 484, 514 };
+    DrawTextW(hdc, MEMSTAND_BRAND_FOOTER, -1, &rcBrand, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 }
 
 void MainWindow::DrawSettings(HDC hdc, const RECT& rcClient) {
@@ -1084,7 +1108,7 @@ void MainWindow::DrawSettings(HDC hdc, const RECT& rcClient) {
     DrawTextW(hdc, L("polling_rate").c_str(), -1, &rcL4, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 
     // Card 2: System & Timer Preferences
-    RECT rcCard2{ 16, 186, 484, 385 };
+    RECT rcCard2{ 16, 186, 484, 400 };
     RoundRect(hdc, rcCard2.left, rcCard2.top, rcCard2.right, rcCard2.bottom, 10, 10);
 
     SelectObject(hdc, hFontBold);
@@ -1105,15 +1129,25 @@ void MainWindow::DrawSettings(HDC hdc, const RECT& rcClient) {
     SelectObject(hdc, hOldBr);
     DeleteObject(hPenBorder);
 
-    // Status Footer
+    // Status & Footer (Two separate rows to guarantee zero overlap)
     SelectObject(hdc, hFontMain);
     SetTextColor(hdc, Theme::TextMuted);
-    RECT rcStatus{ 16, 458, 280, 482 };
-    std::wstring statusDisplay = m_statusText.empty() ? L("status_ready") : m_statusText;
-    DrawTextW(hdc, statusDisplay.c_str(), -1, &rcStatus, DT_LEFT | DT_TOP | DT_SINGLELINE);
 
-    RECT rcBrand{ 280, 458, 484, 482 };
-    DrawTextW(hdc, L"MemStand v1.0.0 • Enix Yazılım", -1, &rcBrand, DT_RIGHT | DT_TOP | DT_SINGLELINE);
+    RECT rcStatus{ 16, 462, 484, 482 };
+    std::wstring statusDisplay = m_statusText.empty() ? L("status_ready") : m_statusText;
+    DrawTextW(hdc, statusDisplay.c_str(), -1, &rcStatus, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS);
+
+    // Subtle divider line
+    HPEN hPenDiv = CreatePen(PS_SOLID, 1, Theme::CardBorder);
+    HPEN hOldPenDiv = (HPEN)SelectObject(hdc, hPenDiv);
+    MoveToEx(hdc, 16, 488, nullptr);
+    LineTo(hdc, 484, 488);
+    SelectObject(hdc, hOldPenDiv);
+    DeleteObject(hPenDiv);
+
+    // Brand / Version Footer
+    RECT rcBrand{ 16, 494, 484, 514 };
+    DrawTextW(hdc, MEMSTAND_BRAND_FOOTER, -1, &rcBrand, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 }
 
 
@@ -1256,7 +1290,7 @@ LRESULT MainWindow::HandleMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             uint64_t freed = MemoryManager::Instance().PurgeStandbyList();
             wchar_t buf[128];
             swprintf_s(buf, L("status_cleaned").c_str(), FormatMemoryBytes(freed).c_str());
-            m_statusText = std::wstring(L"Hotkey: ") + buf;
+            m_statusText = L("reason_hotkey") + L": " + buf;
             m_trayIcon.ShowBalloon(L"MemStand", m_statusText);
             UpdateMetrics();
         }

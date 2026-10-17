@@ -27,6 +27,7 @@
 #define IDC_TAB_BTN_SETTINGS            1020
 #define IDC_BTN_AUTO_DETECT             1021
 #define IDC_BTN_CHECK_UPDATES           1022
+#define IDC_CHK_SHOW_NOTIFICATIONS      1023
 
 // Tray Menu Command IDs
 #define IDM_TRAY_SHOW                   2001

@@ -70,6 +70,7 @@ private:
     HWND m_hChkStartMinimized = nullptr;
     HWND m_hChkMinOnClose = nullptr;
     HWND m_hChkHotkey = nullptr;
+    HWND m_hChkShowNotifications = nullptr;
     HWND m_hComboLanguage = nullptr;
     HWND m_hBtnSaveSettings = nullptr;
     HWND m_hBtnAutoDetect = nullptr;

@@ -1,5 +1,6 @@
 #include "automation_engine.hpp"
 #include "timer_resolution.hpp"
+#include "../i18n/localization.hpp"
 
 namespace MemStand {
 
@@ -55,7 +56,7 @@ void AutomationEngine::WorkerLoop() {
 
                 std::lock_guard<std::mutex> lock(m_mutex);
                 if (m_callback) {
-                    m_callback(L"Standby Auto Purge", freed);
+                    m_callback(L("reason_auto_standby"), freed);
                 }
             }
         }
@@ -73,7 +74,7 @@ void AutomationEngine::WorkerLoop() {
 
                 std::lock_guard<std::mutex> lock(m_mutex);
                 if (m_callback) {
-                    m_callback(L"High RAM Auto Clean", freed);
+                    m_callback(L("reason_auto_high_ram"), freed);
                 }
             }
         }
